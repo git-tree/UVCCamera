@@ -34,6 +34,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,14 +43,15 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.Spinner;
-
-import com.serenegiant.usb.DeviceFilter;
-import com.serenegiant.usb.USBMonitor;
+import android.widget.Toast;
 
 import com.serenegiant.uvccamera.R;
 
 public class CameraDialog extends DialogFragment {
 	private static final String TAG = CameraDialog.class.getSimpleName();
+
+	public static String whichCamera_name;
+	public static boolean disabledialog=false;
 
 	public interface CameraDialogParent {
 		public USBMonitor getUSBMonitor();
@@ -59,6 +61,7 @@ public class CameraDialog extends DialogFragment {
 	/**
 	 * Helper method
 	 * @param parent FragmentActivity
+	 * @param
 	 * @return
 	 */
 	public static CameraDialog showDialog(final Activity parent/* add parameters here if you need */) {
@@ -72,6 +75,7 @@ public class CameraDialog extends DialogFragment {
 	}
 
 	public static CameraDialog newInstance(/* add parameters here if you need */) {
+
 		final CameraDialog dialog = new CameraDialog();
 		final Bundle args = new Bundle();
 		// add parameters here if you need
@@ -128,6 +132,14 @@ public class CameraDialog extends DialogFragment {
 	    final Dialog dialog = builder.create();
 	    dialog.setCancelable(true);
 	    dialog.setCanceledOnTouchOutside(true);
+
+	    if(disabledialog){
+            /*崔术森去除dialog专用*/
+            dialog.show();
+            //确定按钮
+            Button btn_pos = ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            btn_pos.performClick();
+        }
         return dialog;
 	}
 
@@ -171,6 +183,7 @@ public class CameraDialog extends DialogFragment {
 			switch (which) {
 			case DialogInterface.BUTTON_POSITIVE:
 				final Object item = mSpinner.getSelectedItem();
+				whichCamera_name=((UsbDevice) item).getDeviceName();
 				if (item instanceof UsbDevice) {
 					mUSBMonitor.requestPermission((UsbDevice)item);
 					((CameraDialogParent)getActivity()).onDialogResult(false);
@@ -193,10 +206,28 @@ public class CameraDialog extends DialogFragment {
 //		mUSBMonitor.dumpDevices();
 		final List<DeviceFilter> filter = DeviceFilter.getDeviceFilters(getActivity(), R.xml.device_filter);
 		mDeviceListAdapter = new DeviceListAdapter(getActivity(), mUSBMonitor.getDeviceList(filter.get(0)));
+	/*	Toast.makeText(getActivity(),
+				"###deviceid"+mDeviceListAdapter.getItem(1).getDeviceId()+
+						"###name"+mDeviceListAdapter.getItem(1).getDeviceName()+
+						"###Vid"+mDeviceListAdapter.getItem(1).getVendorId(),Toast.LENGTH_LONG).show();*/
 		mSpinner.setAdapter(mDeviceListAdapter);
-	}
 
-	private static final class DeviceListAdapter extends BaseAdapter {
+		if(disabledialog && whichCamera_name!=""){
+			for(int i=0;i<mDeviceListAdapter.getCount();i++){
+//			    Toast.makeText(getActivity(),"###"+mDeviceListAdapter.getItem(0).getDeviceName()+"###",Toast.LENGTH_LONG).show();
+//				Toast.makeText(getActivity(),"###"+mDeviceListAdapter.getItem(i).getDeviceName()+"###"+"\n"+"***"+whichCamera_name,Toast.LENGTH_LONG).show();
+				if(whichCamera_name.equals(mDeviceListAdapter.getItem(i).getDeviceName())){
+//					Toast.makeText(getActivity(),"###"+mDeviceListAdapter.getItem(i).getDeviceName(),Toast.LENGTH_LONG).show();
+					mSpinner.setSelection(i,true);
+				}
+			}
+		}
+
+	}
+    public interface showDialog {
+    }
+
+    private static final class DeviceListAdapter extends BaseAdapter {
 
 		private final LayoutInflater mInflater;
 		private final List<UsbDevice> mList;
@@ -232,7 +263,7 @@ public class CameraDialog extends DialogFragment {
 			if (convertView instanceof CheckedTextView) {
 				final UsbDevice device = getItem(position);
 				((CheckedTextView)convertView).setText(
-					String.format("UVC Camera:(%x:%x:%s)", device.getVendorId(), device.getProductId(), device.getDeviceName()));
+				String.format("UVC Camera:(%x:%x:%s)", device.getVendorId(), device.getProductId(), device.getDeviceName()));
 			}
 			return convertView;
 		}

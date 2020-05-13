@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="579dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="151dp"
+        android:layout_below="@+id/surfaceView"
+        android:layout_marginTop="0dp">
+
+        <TextView
+            android:id="@+id/txt_tip"
+            android:layout_width="103dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/btn_choice"
+            android:layout_marginTop="7dp"
+            android:layout_weight="1"
+            android:text="请输入次数：" />
+
+        <Button
+            android:id="@+id/btn_choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="选择相机" />
+
+        <!--
+
+        -->
+
+        <EditText
+            android:id="@+id/txt_input"
+            android:layout_width="105dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_choice"
+            android:layout_marginStart="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="-3dp"
+            android:layout_toEndOf="@+id/txt_tip"
+            android:layout_toRightOf="@+id/txt_tip"
+            android:ems="10"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="102dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_choice"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_toEndOf="@+id/txt_input"
+            android:layout_toRightOf="@+id/txt_input"
+            android:layout_weight="1"
+            android:text="点击开始" />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="102dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_choice"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_toEndOf="@+id/btn_start"
+            android:layout_toRightOf="@+id/btn_start"
+            android:layout_weight="1"
+            android:text="结束测试" />
+
+        <Button
+            android:id="@+id/btn_report"
+            android:layout_width="102dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_choice"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_toEndOf="@+id/btn_stop"
+            android:layout_toRightOf="@+id/btn_stop"
+            android:text="导出日志" />
+
+        <TextView
+            android:id="@+id/txt_lave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_tip"
+            android:layout_marginTop="11dp"
+            android:text="剩余次数:" />
+
+        <TextView
+            android:id="@+id/txt_lave_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_input"
+            android:layout_marginStart="22dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginTop="1dp"
+            android:layout_toEndOf="@+id/txt_lave"
+            android:layout_toRightOf="@+id/txt_lave"
+            android:text="0" />
+
+
+
+    </RelativeLayout>
+</RelativeLayout>
